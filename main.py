@@ -65,6 +65,7 @@ def inputm(inputStr):
     width = int(inputStr[0])
     height = int(inputStr[1])
     
+    print('now enter matrix:')
     for i in range(height):
         rowStr = input().split()
         if(len(rowStr) == width):
@@ -144,13 +145,7 @@ import time
 t0 = time.time()
 print('enter the size of matrix:')
 
-matrix = [
-    [ 3, 2, 0, -1 ],
-    [ 6, 1, 0, -1 ],
-    [ 0, 6, 4, 0 ],
-    [ 4, 5, -2, 1 ]
-]
-'inputm(input().split())'
+matrix = inputm(input().split())
 
 printm(matrix)
 
