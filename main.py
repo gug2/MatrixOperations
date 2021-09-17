@@ -15,11 +15,32 @@ def E(size):
         k += 1
     
     return matrix
+
+def printPreStr(valStr):
+    preMatrixSpace = 10
+    valStrSpace = len(valStr)
     
-def printm(matrix):
+    for i in range((preMatrixSpace - valStrSpace) // 2):
+        print(' ', end='')
+    
+    print(valStr, end='')
+        
+    for i in range((preMatrixSpace - valStrSpace) // 2 + 1):
+        print(' ', end='')
+
+def printm(matrix, *args):
     mHead(matrix)
     
     for i in range(len(matrix)):
+        
+        if len(args) == 2:
+            if i == len(matrix) // 2 - 1:
+                printPreStr(str(args[0]))
+            if i == len(matrix) // 2:
+                printPreStr('----')
+            if i == len(matrix) // 2 + 1:
+                printPreStr(str(args[1]))
+        
         print('[', end=' ')
         for j in range(len(matrix[0])):
             print(matrix[i][j], end=' ')
@@ -50,14 +71,6 @@ def inputm(inputStr):
         
     return matrix
     
-def transponse(matrix):
-    newMatrix = []
-    
-    for j in range(len(matrix)):
-        newMatrix.append([matrix[i][j] for i in range(len(matrix[0]))])
-        
-    return newMatrix
-    
 def removeRow(matrix, row):
     newMatrix = []
     
@@ -83,36 +96,65 @@ def det(matrix):
     detA = 0
     
     for j in range(len(matrix[0])):
-        print(len(matrix[0]))
-        printm(matrix)
-        
         M = 0
-        if len(matrix[0]) == 1:
+        if len(matrix[0]) == 3:
+            M += matrix[0][0] * matrix[1][1] * matrix[2][2]
+            M += matrix[0][1] * matrix[1][2] * matrix[2][0]
+            M += matrix[1][0] * matrix[2][1] * matrix[0][2]
+            M -= matrix[0][2] * matrix[1][1] * matrix[2][0]
+            M -= matrix[1][0] * matrix[0][1] * matrix[2][2]
+            M -= matrix[1][2] * matrix[2][1] * matrix[0][0]
+            return M
+        elif len(matrix[0]) == 2:
+            M = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+            return M
+        elif len(matrix[0]) == 1:
             M = matrix[0][0]
-            print('endless M')
             return M
         else:
             M = det(removeRow(removeColumn(matrix, j), 0))
-            print('progressive M')
             A = ((-1)**(1+j+1)) * M
             detA += matrix[0][j] * A
     
     return detA
-
+    
+def transponse(matrix):
+    newMatrix = []
+    
+    for j in range(len(matrix)):
+        newMatrix.append([matrix[i][j] for i in range(len(matrix[0]))])
+        
+    return newMatrix
+    
+def inverse(matrix):
+    newMatrix = []
+    
+    aMatrix = []
+    for i in range(len(matrix)):
+        aMatrix.append([((-1)**(i+1+j+1)) * det(removeRow(removeColumn(matrix, j), i)) for j in range(len(matrix[0]))])    
+    
+    aMatrix = transponse(aMatrix)
+    
+    return [1, det(matrix), aMatrix]
+    
 ' MAIN CODE '
+import time
+
+t0 = time.time()
 print('enter the size of matrix:')
 
 matrix = [
-    [ 4, 2, 7, 6, 5, 4, 23 ],
-    [ 7, 7, 7, 0, 0, 4, 3 ],
-    [ 7, -9, 0, 6, 0, 5, 1 ],
-    [ 8, 8, -5, 0, 0, 5, 2 ],
-    [ 2, 9, 0, -3, 0, 4, 2 ],
-    [ 0, 1, 0, 4, -3, -4, 1 ],
-    [ 0, 0, 3, 0, 0, -2, 3 ]
+    [ 3, 2, 0, -1 ],
+    [ 6, 1, 0, -1 ],
+    [ 0, 6, 4, 0 ],
+    [ 4, 5, -2, 1 ]
 ]
 'inputm(input().split())'
 
 printm(matrix)
 
-print(det(matrix))
+print('det:', det(matrix))
+print('inverse:')
+printm(inverse(matrix)[2], inverse(matrix)[0], inverse(matrix)[1])
+
+print('Time elapsed: ', time.time() - t0, 's.')
