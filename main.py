@@ -32,14 +32,15 @@ def printm(matrix, *args):
     mHead(matrix)
     
     for i in range(len(matrix)):
-        
         if len(args) == 2:
             if i == len(matrix) // 2 - 1:
                 printPreStr(str(args[0]))
-            if i == len(matrix) // 2:
+            elif i == len(matrix) // 2:
                 printPreStr('----')
-            if i == len(matrix) // 2 + 1:
+            elif i == len(matrix) // 2 + 1:
                 printPreStr(str(args[1]))
+            else:
+                printPreStr('')
         
         print('[', end=' ')
         for j in range(len(matrix[0])):
