@@ -16,47 +16,31 @@ def E(size):
     
     return matrix
 
-def printPreStr(valStr):
-    preMatrixSpace = 10
-    valStrSpace = len(valStr)
-    
-    for i in range((preMatrixSpace - valStrSpace) // 2):
-        print(' ', end='')
-    
-    print(valStr, end='')
-        
-    for i in range((preMatrixSpace - valStrSpace) // 2 + 1):
-        print(' ', end='')
-
-def printm(matrix, *args):
+def printm(matrix):
     mHead(matrix)
     
     for i in range(len(matrix)):
-        if len(args) == 2:
-            if i == len(matrix) // 2 - 1:
-                printPreStr(str(args[0]))
-            elif i == len(matrix) // 2:
-                printPreStr('----')
-            elif i == len(matrix) // 2 + 1:
-                printPreStr(str(args[1]))
-            else:
-                printPreStr('')
-        
         print('[', end=' ')
         for j in range(len(matrix[0])):
-            print(matrix[i][j], end=' ')
+            print(fraction(matrix[i][j]), end=' ')
         print(']')
 
 def mHead(matrix):
-    width = len(matrix[0]) * 2 + 2 - 6
+    name = 'matrix'
+    width = len(matrix[0]) * 2 + 2 - len(name)
     
     for i in range(width // 2):
         print('-', end='')
-    print('matrix', end='')
+    print(name, end='')
     for i in range(width // 2 + 1):
         print('-', end='')
     
     print()
+    
+from fractions import Fraction
+
+def fraction(val):
+    return Fraction(val).limit_denominator(1000)
     
 ' OPERATION METHODS '
 def inputm(inputStr):
@@ -65,7 +49,7 @@ def inputm(inputStr):
     width = int(inputStr[0])
     height = int(inputStr[1])
     
-    print('now enter matrix:')
+    print('now enter matrix: (теперь введите матрицу:)')
     for i in range(height):
         rowStr = input().split()
         if(len(rowStr) == width):
@@ -129,6 +113,11 @@ def transponse(matrix):
     return newMatrix
     
 def inverse(matrix):
+    detA = det(matrix)
+    if detA == 0:
+        print('error! inverse matrix doesn\'t exist! (ошибка! обратной матрицы не существует, т.к det = 0)')
+        return matrix
+    
     newMatrix = []
     
     aMatrix = []
@@ -137,20 +126,26 @@ def inverse(matrix):
     
     aMatrix = transponse(aMatrix)
     
-    return [1, det(matrix), aMatrix]
+    for i in range(len(matrix)):
+        newMatrix.append([1.0 / detA * aMatrix[i][j] for j in range(len(matrix[0]))])
     
+    return newMatrix
+
 ' MAIN CODE '
 import time
 
 t0 = time.time()
-print('enter the size of matrix:')
+print('enter the size of matrix: (введите размер матрицы)')
 
 matrix = inputm(input().split())
 
 printm(matrix)
 
-print('det:', det(matrix))
-print('inverse:')
-printm(inverse(matrix)[2], inverse(matrix)[0], inverse(matrix)[1])
+print('det: (детерминант:)', det(matrix))
+print('inverse: (обратная:)')
+printm(inverse(matrix))
 
 print('Time elapsed: ', time.time() - t0, 's.')
+
+'задержка'
+input()
