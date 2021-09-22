@@ -43,18 +43,21 @@ def fraction(val):
     return Fraction(val).limit_denominator(1000)
     
 ' OPERATION METHODS '
-def inputm(inputStr):
+def inputm():
+    print('enter the size of matrix: (введите размер матрицы)')
+    
     matrix = []
     
+    inputStr = input().split()
     width = int(inputStr[0])
     height = int(inputStr[1])
     
     print('now enter matrix: (теперь введите матрицу:)')
-    for i in range(height):
+    for i in range(width):
         rowStr = input().split()
-        if(len(rowStr) == width):
+        if(len(rowStr) == height):
             matrix.append([int(k) for k in rowStr])
-        
+    
     return matrix
     
 def removeRow(matrix, row):
@@ -80,6 +83,10 @@ def removeColumn(matrix, column):
     
 def det(matrix):
     detA = 0
+    
+    if len(matrix) != len(matrix[0]):
+        print('error! matrix isn\'t square!')
+        return None
     
     for j in range(len(matrix[0])):
         M = 0
@@ -107,8 +114,8 @@ def det(matrix):
 def transponse(matrix):
     newMatrix = []
     
-    for j in range(len(matrix)):
-        newMatrix.append([matrix[i][j] for i in range(len(matrix[0]))])
+    for j in range(len(matrix[0])):
+        newMatrix.append([matrix[i][j] for i in range(len(matrix))])
         
     return newMatrix
     
@@ -116,7 +123,7 @@ def inverse(matrix):
     detA = det(matrix)
     if detA == 0:
         print('error! inverse matrix doesn\'t exist! (ошибка! обратной матрицы не существует, т.к det = 0)')
-        return matrix
+        return None
     
     newMatrix = []
     
@@ -131,12 +138,25 @@ def inverse(matrix):
     
     return newMatrix
 
+def dot(m1, m2):
+    newM = []
+    
+    if len(m1[0]) != len(m2):
+        print('error! dot isn\'t possible!')
+        return None
+    
+    for j2 in range(len(m2[0])):
+        newM.append([ sum([ m1[i1][j1] * m2[j1][j2] for j1 in range(len(m1[0])) ]) for i1 in range(len(m1)) ])
+    
+    newM = transponse(newM)
+    
+    return newM
+
 ' MAIN CODE '
 import time
 
 t0 = time.time()
-print('enter the size of matrix: (введите размер матрицы)')
-
+'''
 matrix = inputm(input().split())
 
 printm(matrix)
@@ -144,8 +164,11 @@ printm(matrix)
 print('det: (детерминант:)', det(matrix))
 print('inverse: (обратная:)')
 printm(inverse(matrix))
+'''
+printm(dot(inputm(), inputm()))
+
 
 print('Time elapsed: ', time.time() - t0, 's.')
 
 'задержка'
-input()
+'input()'
