@@ -85,7 +85,7 @@ def det(matrix):
     detA = 0
     
     if len(matrix) != len(matrix[0]):
-        print('error! matrix isn\'t square!')
+        print('error! matrix isn\'t square! (матрица не квадратная!)')
         return None
     
     for j in range(len(matrix[0])):
@@ -122,7 +122,7 @@ def transponse(matrix):
 def inverse(matrix):
     detA = det(matrix)
     if detA == 0:
-        print('error! inverse matrix doesn\'t exist! (ошибка! обратной матрицы не существует, т.к det = 0)')
+        print('error! inverse matrix doesn\'t exist! (обратной матрицы не существует, т.к det = 0)')
         return None
     
     newMatrix = []
@@ -142,7 +142,7 @@ def dot(m1, m2):
     newM = []
     
     if len(m1[0]) != len(m2):
-        print('error! dot isn\'t possible!')
+        print('error! dot isn\'t possible! (умножение невозможно!)')
         return None
     
     for j2 in range(len(m2[0])):
@@ -156,17 +156,23 @@ def dot(m1, m2):
 import time
 
 t0 = time.time()
-'''
-matrix = inputm(input().split())
 
-printm(matrix)
+print('Operation codes (коды операций):')
+print('Find det and inverse matrix (найти свойства матрицы (определитель, обратная)) -', 0)
+print('Find dot of 2 matrices(найти произведение матриц) -', 1)
+operationCode = int(input())
 
-print('det: (детерминант:)', det(matrix))
-print('inverse: (обратная:)')
-printm(inverse(matrix))
-'''
-printm(dot(inputm(), inputm()))
-
+if(operationCode == 0):
+    matrix = inputm()
+    printm(matrix)
+    print('Det (детерминант): ', det(matrix))
+    print('Inverse (обратная): ')
+    printm(inverse(matrix))
+elif(operationCode == 1):
+    m1 = inputm()
+    m2 = inputm()
+    print('Dot product (результирующая матрица): ')
+    printm(dot(m1, m2))
 
 print('Time elapsed: ', time.time() - t0, 's.')
 
